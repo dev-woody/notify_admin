@@ -56,7 +56,7 @@ export const sidebarData: SidebarData = {
         },
         {
           title: '직원관리',
-          url: '/tasks',
+          url: '/user',
           icon: IconChecklist,
         },
         // {
