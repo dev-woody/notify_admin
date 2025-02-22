@@ -34,6 +34,9 @@ const authForgotPasswordLazyImport = createFileRoute(
 const AuthenticatedSettingsRouteLazyImport = createFileRoute(
   '/_authenticated/settings',
 )()
+const AuthenticatedUserIndexLazyImport = createFileRoute(
+  '/_authenticated/user/',
+)()
 const AuthenticatedTasksIndexLazyImport = createFileRoute(
   '/_authenticated/tasks/',
 )()
@@ -170,6 +173,16 @@ const auth500Route = auth500Import.update({
   path: '/500',
   getParentRoute: () => rootRoute,
 } as any)
+
+const AuthenticatedUserIndexLazyRoute = AuthenticatedUserIndexLazyImport.update(
+  {
+    id: '/user/',
+    path: '/user/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any,
+).lazy(() =>
+  import('./routes/_authenticated/user/index.lazy').then((d) => d.Route),
+)
 
 const AuthenticatedTasksIndexLazyRoute =
   AuthenticatedTasksIndexLazyImport.update({
@@ -438,6 +451,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTasksIndexLazyImport
       parentRoute: typeof AuthenticatedRouteImport
     }
+    '/_authenticated/user/': {
+      id: '/_authenticated/user/'
+      path: '/user'
+      fullPath: '/user'
+      preLoaderRoute: typeof AuthenticatedUserIndexLazyImport
+      parentRoute: typeof AuthenticatedRouteImport
+    }
     '/_authenticated/client/register/': {
       id: '/_authenticated/client/register/'
       path: '/client/register'
@@ -483,6 +503,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedClientIndexLazyRoute: typeof AuthenticatedClientIndexLazyRoute
   AuthenticatedHelpCenterIndexLazyRoute: typeof AuthenticatedHelpCenterIndexLazyRoute
   AuthenticatedTasksIndexLazyRoute: typeof AuthenticatedTasksIndexLazyRoute
+  AuthenticatedUserIndexLazyRoute: typeof AuthenticatedUserIndexLazyRoute
   AuthenticatedClientRegisterIndexLazyRoute: typeof AuthenticatedClientRegisterIndexLazyRoute
 }
 
@@ -494,6 +515,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedClientIndexLazyRoute: AuthenticatedClientIndexLazyRoute,
   AuthenticatedHelpCenterIndexLazyRoute: AuthenticatedHelpCenterIndexLazyRoute,
   AuthenticatedTasksIndexLazyRoute: AuthenticatedTasksIndexLazyRoute,
+  AuthenticatedUserIndexLazyRoute: AuthenticatedUserIndexLazyRoute,
   AuthenticatedClientRegisterIndexLazyRoute:
     AuthenticatedClientRegisterIndexLazyRoute,
 }
@@ -524,6 +546,7 @@ export interface FileRoutesByFullPath {
   '/help-center': typeof AuthenticatedHelpCenterIndexLazyRoute
   '/settings/': typeof AuthenticatedSettingsIndexLazyRoute
   '/tasks': typeof AuthenticatedTasksIndexLazyRoute
+  '/user': typeof AuthenticatedUserIndexLazyRoute
   '/client/register': typeof AuthenticatedClientRegisterIndexLazyRoute
 }
 
@@ -548,6 +571,7 @@ export interface FileRoutesByTo {
   '/help-center': typeof AuthenticatedHelpCenterIndexLazyRoute
   '/settings': typeof AuthenticatedSettingsIndexLazyRoute
   '/tasks': typeof AuthenticatedTasksIndexLazyRoute
+  '/user': typeof AuthenticatedUserIndexLazyRoute
   '/client/register': typeof AuthenticatedClientRegisterIndexLazyRoute
 }
 
@@ -576,6 +600,7 @@ export interface FileRoutesById {
   '/_authenticated/help-center/': typeof AuthenticatedHelpCenterIndexLazyRoute
   '/_authenticated/settings/': typeof AuthenticatedSettingsIndexLazyRoute
   '/_authenticated/tasks/': typeof AuthenticatedTasksIndexLazyRoute
+  '/_authenticated/user/': typeof AuthenticatedUserIndexLazyRoute
   '/_authenticated/client/register/': typeof AuthenticatedClientRegisterIndexLazyRoute
 }
 
@@ -604,6 +629,7 @@ export interface FileRouteTypes {
     | '/help-center'
     | '/settings/'
     | '/tasks'
+    | '/user'
     | '/client/register'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -627,6 +653,7 @@ export interface FileRouteTypes {
     | '/help-center'
     | '/settings'
     | '/tasks'
+    | '/user'
     | '/client/register'
   id:
     | '__root__'
@@ -653,6 +680,7 @@ export interface FileRouteTypes {
     | '/_authenticated/help-center/'
     | '/_authenticated/settings/'
     | '/_authenticated/tasks/'
+    | '/_authenticated/user/'
     | '/_authenticated/client/register/'
   fileRoutesById: FileRoutesById
 }
@@ -720,6 +748,7 @@ export const routeTree = rootRoute
         "/_authenticated/client/",
         "/_authenticated/help-center/",
         "/_authenticated/tasks/",
+        "/_authenticated/user/",
         "/_authenticated/client/register/"
       ]
     },
@@ -805,6 +834,10 @@ export const routeTree = rootRoute
     },
     "/_authenticated/tasks/": {
       "filePath": "_authenticated/tasks/index.lazy.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/user/": {
+      "filePath": "_authenticated/user/index.lazy.tsx",
       "parent": "/_authenticated"
     },
     "/_authenticated/client/register/": {
