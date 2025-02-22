@@ -7,7 +7,6 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
-import { useUserStore } from '@/stores/userStore'
 import { handleServerError } from '@/utils/handle-server-error'
 import { toast } from '@/hooks/use-toast'
 import { ThemeProvider } from './context/theme-context'
@@ -56,7 +55,6 @@ const queryClient = new QueryClient({
             variant: 'destructive',
             title: '세션이 만료되었습니다.',
           })
-          useUserStore.getState().resetUser()
           const redirect = `${router.history.location.href}`
           router.navigate({ to: '/sign-in-2', search: { redirect } })
         }
@@ -72,7 +70,6 @@ const queryClient = new QueryClient({
             variant: 'destructive',
             title: '로그인 후 접근가능합니다.',
           })
-          useUserStore.getState().resetUser()
           const redirect = `${router.history.location.href}`
           router.navigate({ to: '/sign-in-2', search: { redirect } })
           // router.navigate("/forbidden", { replace: true });

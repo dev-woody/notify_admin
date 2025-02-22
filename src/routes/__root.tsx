@@ -7,7 +7,6 @@ import {
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 // import { checkSession } from '@/api/user-management/auth-api'
-import { useUserStore } from '@/stores/userStore'
 import { Toaster } from '@/components/ui/toaster'
 import GeneralError from '@/features/errors/general-error'
 import NotFoundError from '@/features/errors/not-found-error'

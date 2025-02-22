@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -39,9 +40,9 @@ export function EditDialog<T>({
   // currentRow가 없으면 아무것도 렌더링하지 않음
   if (!currentRow) return null
 
-  const [formData, setFormData] = React.useState<T>(currentRow)
+  const [formData, setFormData] = useState<T>(currentRow)
 
-  React.useEffect(() => {
+  useEffect(() => {
     setFormData(currentRow)
   }, [currentRow])
 

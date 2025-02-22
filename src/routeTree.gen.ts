@@ -49,9 +49,6 @@ const AuthenticatedClientIndexLazyImport = createFileRoute(
 const AuthenticatedChatsIndexLazyImport = createFileRoute(
   '/_authenticated/chats/',
 )()
-const AuthenticatedAppsIndexLazyImport = createFileRoute(
-  '/_authenticated/apps/',
-)()
 const AuthenticatedSettingsNotificationsLazyImport = createFileRoute(
   '/_authenticated/settings/notifications',
 )()
@@ -64,26 +61,8 @@ const AuthenticatedSettingsAppearanceLazyImport = createFileRoute(
 const AuthenticatedSettingsAccountLazyImport = createFileRoute(
   '/_authenticated/settings/account',
 )()
-const AuthenticatedAppsBenefitInfoLazyImport = createFileRoute(
-  '/_authenticated/apps/benefit-info',
-)()
-const AuthenticatedAppsBannerLazyImport = createFileRoute(
-  '/_authenticated/apps/banner',
-)()
 const AuthenticatedClientRegisterIndexLazyImport = createFileRoute(
   '/_authenticated/client/register/',
-)()
-const AuthenticatedAppsPushPushSetLazyImport = createFileRoute(
-  '/_authenticated/apps/push/push-set',
-)()
-const AuthenticatedAppsPushPushLogsLazyImport = createFileRoute(
-  '/_authenticated/apps/push/push-logs',
-)()
-const AuthenticatedAppsInstallLogsLazyImport = createFileRoute(
-  '/_authenticated/apps/install/logs',
-)()
-const AuthenticatedAppsInstallDeviceLogsLazyImport = createFileRoute(
-  '/_authenticated/apps/install/device-logs',
 )()
 
 // Create/Update Routes
@@ -239,16 +218,6 @@ const AuthenticatedChatsIndexLazyRoute =
     import('./routes/_authenticated/chats/index.lazy').then((d) => d.Route),
   )
 
-const AuthenticatedAppsIndexLazyRoute = AuthenticatedAppsIndexLazyImport.update(
-  {
-    id: '/apps/',
-    path: '/apps/',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any,
-).lazy(() =>
-  import('./routes/_authenticated/apps/index.lazy').then((d) => d.Route),
-)
-
 const AuthenticatedSettingsNotificationsLazyRoute =
   AuthenticatedSettingsNotificationsLazyImport.update({
     id: '/notifications',
@@ -293,26 +262,6 @@ const AuthenticatedSettingsAccountLazyRoute =
     ),
   )
 
-const AuthenticatedAppsBenefitInfoLazyRoute =
-  AuthenticatedAppsBenefitInfoLazyImport.update({
-    id: '/apps/benefit-info',
-    path: '/apps/benefit-info',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any).lazy(() =>
-    import('./routes/_authenticated/apps/benefit-info.lazy').then(
-      (d) => d.Route,
-    ),
-  )
-
-const AuthenticatedAppsBannerLazyRoute =
-  AuthenticatedAppsBannerLazyImport.update({
-    id: '/apps/banner',
-    path: '/apps/banner',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any).lazy(() =>
-    import('./routes/_authenticated/apps/banner.lazy').then((d) => d.Route),
-  )
-
 const AuthenticatedClientRegisterIndexLazyRoute =
   AuthenticatedClientRegisterIndexLazyImport.update({
     id: '/client/register/',
@@ -320,50 +269,6 @@ const AuthenticatedClientRegisterIndexLazyRoute =
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any).lazy(() =>
     import('./routes/_authenticated/client/register/index.lazy').then(
-      (d) => d.Route,
-    ),
-  )
-
-const AuthenticatedAppsPushPushSetLazyRoute =
-  AuthenticatedAppsPushPushSetLazyImport.update({
-    id: '/apps/push/push-set',
-    path: '/apps/push/push-set',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any).lazy(() =>
-    import('./routes/_authenticated/apps/push/push-set.lazy').then(
-      (d) => d.Route,
-    ),
-  )
-
-const AuthenticatedAppsPushPushLogsLazyRoute =
-  AuthenticatedAppsPushPushLogsLazyImport.update({
-    id: '/apps/push/push-logs',
-    path: '/apps/push/push-logs',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any).lazy(() =>
-    import('./routes/_authenticated/apps/push/push-logs.lazy').then(
-      (d) => d.Route,
-    ),
-  )
-
-const AuthenticatedAppsInstallLogsLazyRoute =
-  AuthenticatedAppsInstallLogsLazyImport.update({
-    id: '/apps/install/logs',
-    path: '/apps/install/logs',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any).lazy(() =>
-    import('./routes/_authenticated/apps/install/logs.lazy').then(
-      (d) => d.Route,
-    ),
-  )
-
-const AuthenticatedAppsInstallDeviceLogsLazyRoute =
-  AuthenticatedAppsInstallDeviceLogsLazyImport.update({
-    id: '/apps/install/device-logs',
-    path: '/apps/install/device-logs',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any).lazy(() =>
-    import('./routes/_authenticated/apps/install/device-logs.lazy').then(
       (d) => d.Route,
     ),
   )
@@ -470,20 +375,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedIndexImport
       parentRoute: typeof AuthenticatedRouteImport
     }
-    '/_authenticated/apps/banner': {
-      id: '/_authenticated/apps/banner'
-      path: '/apps/banner'
-      fullPath: '/apps/banner'
-      preLoaderRoute: typeof AuthenticatedAppsBannerLazyImport
-      parentRoute: typeof AuthenticatedRouteImport
-    }
-    '/_authenticated/apps/benefit-info': {
-      id: '/_authenticated/apps/benefit-info'
-      path: '/apps/benefit-info'
-      fullPath: '/apps/benefit-info'
-      preLoaderRoute: typeof AuthenticatedAppsBenefitInfoLazyImport
-      parentRoute: typeof AuthenticatedRouteImport
-    }
     '/_authenticated/settings/account': {
       id: '/_authenticated/settings/account'
       path: '/account'
@@ -511,13 +402,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/settings/notifications'
       preLoaderRoute: typeof AuthenticatedSettingsNotificationsLazyImport
       parentRoute: typeof AuthenticatedSettingsRouteLazyImport
-    }
-    '/_authenticated/apps/': {
-      id: '/_authenticated/apps/'
-      path: '/apps'
-      fullPath: '/apps'
-      preLoaderRoute: typeof AuthenticatedAppsIndexLazyImport
-      parentRoute: typeof AuthenticatedRouteImport
     }
     '/_authenticated/chats/': {
       id: '/_authenticated/chats/'
@@ -552,34 +436,6 @@ declare module '@tanstack/react-router' {
       path: '/tasks'
       fullPath: '/tasks'
       preLoaderRoute: typeof AuthenticatedTasksIndexLazyImport
-      parentRoute: typeof AuthenticatedRouteImport
-    }
-    '/_authenticated/apps/install/device-logs': {
-      id: '/_authenticated/apps/install/device-logs'
-      path: '/apps/install/device-logs'
-      fullPath: '/apps/install/device-logs'
-      preLoaderRoute: typeof AuthenticatedAppsInstallDeviceLogsLazyImport
-      parentRoute: typeof AuthenticatedRouteImport
-    }
-    '/_authenticated/apps/install/logs': {
-      id: '/_authenticated/apps/install/logs'
-      path: '/apps/install/logs'
-      fullPath: '/apps/install/logs'
-      preLoaderRoute: typeof AuthenticatedAppsInstallLogsLazyImport
-      parentRoute: typeof AuthenticatedRouteImport
-    }
-    '/_authenticated/apps/push/push-logs': {
-      id: '/_authenticated/apps/push/push-logs'
-      path: '/apps/push/push-logs'
-      fullPath: '/apps/push/push-logs'
-      preLoaderRoute: typeof AuthenticatedAppsPushPushLogsLazyImport
-      parentRoute: typeof AuthenticatedRouteImport
-    }
-    '/_authenticated/apps/push/push-set': {
-      id: '/_authenticated/apps/push/push-set'
-      path: '/apps/push/push-set'
-      fullPath: '/apps/push/push-set'
-      preLoaderRoute: typeof AuthenticatedAppsPushPushSetLazyImport
       parentRoute: typeof AuthenticatedRouteImport
     }
     '/_authenticated/client/register/': {
@@ -623,17 +479,10 @@ const AuthenticatedSettingsRouteLazyRouteWithChildren =
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedSettingsRouteLazyRoute: typeof AuthenticatedSettingsRouteLazyRouteWithChildren
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
-  AuthenticatedAppsBannerLazyRoute: typeof AuthenticatedAppsBannerLazyRoute
-  AuthenticatedAppsBenefitInfoLazyRoute: typeof AuthenticatedAppsBenefitInfoLazyRoute
-  AuthenticatedAppsIndexLazyRoute: typeof AuthenticatedAppsIndexLazyRoute
   AuthenticatedChatsIndexLazyRoute: typeof AuthenticatedChatsIndexLazyRoute
   AuthenticatedClientIndexLazyRoute: typeof AuthenticatedClientIndexLazyRoute
   AuthenticatedHelpCenterIndexLazyRoute: typeof AuthenticatedHelpCenterIndexLazyRoute
   AuthenticatedTasksIndexLazyRoute: typeof AuthenticatedTasksIndexLazyRoute
-  AuthenticatedAppsInstallDeviceLogsLazyRoute: typeof AuthenticatedAppsInstallDeviceLogsLazyRoute
-  AuthenticatedAppsInstallLogsLazyRoute: typeof AuthenticatedAppsInstallLogsLazyRoute
-  AuthenticatedAppsPushPushLogsLazyRoute: typeof AuthenticatedAppsPushPushLogsLazyRoute
-  AuthenticatedAppsPushPushSetLazyRoute: typeof AuthenticatedAppsPushPushSetLazyRoute
   AuthenticatedClientRegisterIndexLazyRoute: typeof AuthenticatedClientRegisterIndexLazyRoute
 }
 
@@ -641,19 +490,10 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSettingsRouteLazyRoute:
     AuthenticatedSettingsRouteLazyRouteWithChildren,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
-  AuthenticatedAppsBannerLazyRoute: AuthenticatedAppsBannerLazyRoute,
-  AuthenticatedAppsBenefitInfoLazyRoute: AuthenticatedAppsBenefitInfoLazyRoute,
-  AuthenticatedAppsIndexLazyRoute: AuthenticatedAppsIndexLazyRoute,
   AuthenticatedChatsIndexLazyRoute: AuthenticatedChatsIndexLazyRoute,
   AuthenticatedClientIndexLazyRoute: AuthenticatedClientIndexLazyRoute,
   AuthenticatedHelpCenterIndexLazyRoute: AuthenticatedHelpCenterIndexLazyRoute,
   AuthenticatedTasksIndexLazyRoute: AuthenticatedTasksIndexLazyRoute,
-  AuthenticatedAppsInstallDeviceLogsLazyRoute:
-    AuthenticatedAppsInstallDeviceLogsLazyRoute,
-  AuthenticatedAppsInstallLogsLazyRoute: AuthenticatedAppsInstallLogsLazyRoute,
-  AuthenticatedAppsPushPushLogsLazyRoute:
-    AuthenticatedAppsPushPushLogsLazyRoute,
-  AuthenticatedAppsPushPushSetLazyRoute: AuthenticatedAppsPushPushSetLazyRoute,
   AuthenticatedClientRegisterIndexLazyRoute:
     AuthenticatedClientRegisterIndexLazyRoute,
 }
@@ -675,22 +515,15 @@ export interface FileRoutesByFullPath {
   '/404': typeof errors404LazyRoute
   '/503': typeof errors503LazyRoute
   '/': typeof AuthenticatedIndexRoute
-  '/apps/banner': typeof AuthenticatedAppsBannerLazyRoute
-  '/apps/benefit-info': typeof AuthenticatedAppsBenefitInfoLazyRoute
   '/settings/account': typeof AuthenticatedSettingsAccountLazyRoute
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceLazyRoute
   '/settings/display': typeof AuthenticatedSettingsDisplayLazyRoute
   '/settings/notifications': typeof AuthenticatedSettingsNotificationsLazyRoute
-  '/apps': typeof AuthenticatedAppsIndexLazyRoute
   '/chats': typeof AuthenticatedChatsIndexLazyRoute
   '/client': typeof AuthenticatedClientIndexLazyRoute
   '/help-center': typeof AuthenticatedHelpCenterIndexLazyRoute
   '/settings/': typeof AuthenticatedSettingsIndexLazyRoute
   '/tasks': typeof AuthenticatedTasksIndexLazyRoute
-  '/apps/install/device-logs': typeof AuthenticatedAppsInstallDeviceLogsLazyRoute
-  '/apps/install/logs': typeof AuthenticatedAppsInstallLogsLazyRoute
-  '/apps/push/push-logs': typeof AuthenticatedAppsPushPushLogsLazyRoute
-  '/apps/push/push-set': typeof AuthenticatedAppsPushPushSetLazyRoute
   '/client/register': typeof AuthenticatedClientRegisterIndexLazyRoute
 }
 
@@ -706,22 +539,15 @@ export interface FileRoutesByTo {
   '/404': typeof errors404LazyRoute
   '/503': typeof errors503LazyRoute
   '/': typeof AuthenticatedIndexRoute
-  '/apps/banner': typeof AuthenticatedAppsBannerLazyRoute
-  '/apps/benefit-info': typeof AuthenticatedAppsBenefitInfoLazyRoute
   '/settings/account': typeof AuthenticatedSettingsAccountLazyRoute
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceLazyRoute
   '/settings/display': typeof AuthenticatedSettingsDisplayLazyRoute
   '/settings/notifications': typeof AuthenticatedSettingsNotificationsLazyRoute
-  '/apps': typeof AuthenticatedAppsIndexLazyRoute
   '/chats': typeof AuthenticatedChatsIndexLazyRoute
   '/client': typeof AuthenticatedClientIndexLazyRoute
   '/help-center': typeof AuthenticatedHelpCenterIndexLazyRoute
   '/settings': typeof AuthenticatedSettingsIndexLazyRoute
   '/tasks': typeof AuthenticatedTasksIndexLazyRoute
-  '/apps/install/device-logs': typeof AuthenticatedAppsInstallDeviceLogsLazyRoute
-  '/apps/install/logs': typeof AuthenticatedAppsInstallLogsLazyRoute
-  '/apps/push/push-logs': typeof AuthenticatedAppsPushPushLogsLazyRoute
-  '/apps/push/push-set': typeof AuthenticatedAppsPushPushSetLazyRoute
   '/client/register': typeof AuthenticatedClientRegisterIndexLazyRoute
 }
 
@@ -741,22 +567,15 @@ export interface FileRoutesById {
   '/(errors)/500': typeof errors500LazyRoute
   '/(errors)/503': typeof errors503LazyRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
-  '/_authenticated/apps/banner': typeof AuthenticatedAppsBannerLazyRoute
-  '/_authenticated/apps/benefit-info': typeof AuthenticatedAppsBenefitInfoLazyRoute
   '/_authenticated/settings/account': typeof AuthenticatedSettingsAccountLazyRoute
   '/_authenticated/settings/appearance': typeof AuthenticatedSettingsAppearanceLazyRoute
   '/_authenticated/settings/display': typeof AuthenticatedSettingsDisplayLazyRoute
   '/_authenticated/settings/notifications': typeof AuthenticatedSettingsNotificationsLazyRoute
-  '/_authenticated/apps/': typeof AuthenticatedAppsIndexLazyRoute
   '/_authenticated/chats/': typeof AuthenticatedChatsIndexLazyRoute
   '/_authenticated/client/': typeof AuthenticatedClientIndexLazyRoute
   '/_authenticated/help-center/': typeof AuthenticatedHelpCenterIndexLazyRoute
   '/_authenticated/settings/': typeof AuthenticatedSettingsIndexLazyRoute
   '/_authenticated/tasks/': typeof AuthenticatedTasksIndexLazyRoute
-  '/_authenticated/apps/install/device-logs': typeof AuthenticatedAppsInstallDeviceLogsLazyRoute
-  '/_authenticated/apps/install/logs': typeof AuthenticatedAppsInstallLogsLazyRoute
-  '/_authenticated/apps/push/push-logs': typeof AuthenticatedAppsPushPushLogsLazyRoute
-  '/_authenticated/apps/push/push-set': typeof AuthenticatedAppsPushPushSetLazyRoute
   '/_authenticated/client/register/': typeof AuthenticatedClientRegisterIndexLazyRoute
 }
 
@@ -776,22 +595,15 @@ export interface FileRouteTypes {
     | '/404'
     | '/503'
     | '/'
-    | '/apps/banner'
-    | '/apps/benefit-info'
     | '/settings/account'
     | '/settings/appearance'
     | '/settings/display'
     | '/settings/notifications'
-    | '/apps'
     | '/chats'
     | '/client'
     | '/help-center'
     | '/settings/'
     | '/tasks'
-    | '/apps/install/device-logs'
-    | '/apps/install/logs'
-    | '/apps/push/push-logs'
-    | '/apps/push/push-set'
     | '/client/register'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -806,22 +618,15 @@ export interface FileRouteTypes {
     | '/404'
     | '/503'
     | '/'
-    | '/apps/banner'
-    | '/apps/benefit-info'
     | '/settings/account'
     | '/settings/appearance'
     | '/settings/display'
     | '/settings/notifications'
-    | '/apps'
     | '/chats'
     | '/client'
     | '/help-center'
     | '/settings'
     | '/tasks'
-    | '/apps/install/device-logs'
-    | '/apps/install/logs'
-    | '/apps/push/push-logs'
-    | '/apps/push/push-set'
     | '/client/register'
   id:
     | '__root__'
@@ -839,22 +644,15 @@ export interface FileRouteTypes {
     | '/(errors)/500'
     | '/(errors)/503'
     | '/_authenticated/'
-    | '/_authenticated/apps/banner'
-    | '/_authenticated/apps/benefit-info'
     | '/_authenticated/settings/account'
     | '/_authenticated/settings/appearance'
     | '/_authenticated/settings/display'
     | '/_authenticated/settings/notifications'
-    | '/_authenticated/apps/'
     | '/_authenticated/chats/'
     | '/_authenticated/client/'
     | '/_authenticated/help-center/'
     | '/_authenticated/settings/'
     | '/_authenticated/tasks/'
-    | '/_authenticated/apps/install/device-logs'
-    | '/_authenticated/apps/install/logs'
-    | '/_authenticated/apps/push/push-logs'
-    | '/_authenticated/apps/push/push-set'
     | '/_authenticated/client/register/'
   fileRoutesById: FileRoutesById
 }
@@ -918,17 +716,10 @@ export const routeTree = rootRoute
       "children": [
         "/_authenticated/settings",
         "/_authenticated/",
-        "/_authenticated/apps/banner",
-        "/_authenticated/apps/benefit-info",
-        "/_authenticated/apps/",
         "/_authenticated/chats/",
         "/_authenticated/client/",
         "/_authenticated/help-center/",
         "/_authenticated/tasks/",
-        "/_authenticated/apps/install/device-logs",
-        "/_authenticated/apps/install/logs",
-        "/_authenticated/apps/push/push-logs",
-        "/_authenticated/apps/push/push-set",
         "/_authenticated/client/register/"
       ]
     },
@@ -980,14 +771,6 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/index.tsx",
       "parent": "/_authenticated"
     },
-    "/_authenticated/apps/banner": {
-      "filePath": "_authenticated/apps/banner.lazy.tsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/apps/benefit-info": {
-      "filePath": "_authenticated/apps/benefit-info.lazy.tsx",
-      "parent": "/_authenticated"
-    },
     "/_authenticated/settings/account": {
       "filePath": "_authenticated/settings/account.lazy.tsx",
       "parent": "/_authenticated/settings"
@@ -1003,10 +786,6 @@ export const routeTree = rootRoute
     "/_authenticated/settings/notifications": {
       "filePath": "_authenticated/settings/notifications.lazy.tsx",
       "parent": "/_authenticated/settings"
-    },
-    "/_authenticated/apps/": {
-      "filePath": "_authenticated/apps/index.lazy.tsx",
-      "parent": "/_authenticated"
     },
     "/_authenticated/chats/": {
       "filePath": "_authenticated/chats/index.lazy.tsx",
@@ -1026,22 +805,6 @@ export const routeTree = rootRoute
     },
     "/_authenticated/tasks/": {
       "filePath": "_authenticated/tasks/index.lazy.tsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/apps/install/device-logs": {
-      "filePath": "_authenticated/apps/install/device-logs.lazy.tsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/apps/install/logs": {
-      "filePath": "_authenticated/apps/install/logs.lazy.tsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/apps/push/push-logs": {
-      "filePath": "_authenticated/apps/push/push-logs.lazy.tsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/apps/push/push-set": {
-      "filePath": "_authenticated/apps/push/push-set.lazy.tsx",
       "parent": "/_authenticated"
     },
     "/_authenticated/client/register/": {

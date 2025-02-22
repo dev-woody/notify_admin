@@ -25,7 +25,7 @@ const BreadCrumbForm = ({ breadCrumbList }: BreadCrumbFormProps) => {
             const isLast = index === breadCrumbList.length - 1
 
             return (
-              <React.Fragment key={index}>
+              <div key={index}>
                 <BreadcrumbItem>
                   {isLast || !item.url ? (
                     // 마지막 항목 또는 url이 없으면 BreadcrumbPage로 표시
@@ -38,7 +38,7 @@ const BreadCrumbForm = ({ breadCrumbList }: BreadCrumbFormProps) => {
                   )}
                 </BreadcrumbItem>
                 {!isLast && <BreadcrumbSeparator />}
-              </React.Fragment>
+              </div>
             )
           })}
         </BreadcrumbList>
