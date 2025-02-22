@@ -1,0 +1,135 @@
+import { FormProvider, useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import {
+  BoardType,
+  BoardTypeUpdate,
+  boardTypeUpdateSchema,
+} from '@/data/schema/config/board/boardTypeSchema'
+import { useBoardTypeUpdate } from '@/queries/board/useBoardTypeQuery'
+import { useCustom } from '@/context/table-context'
+import { toast } from '@/hooks/use-toast'
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+
+export default function BoardTypeUpdateForm() {
+  const { mutate: update } = useBoardTypeUpdate()
+  const { setOpen, currentRow } = useCustom<BoardType>()
+
+  const form = useForm<BoardTypeUpdate>({
+    resolver: zodResolver(boardTypeUpdateSchema),
+    defaultValues: {
+      boardTypeUuid: currentRow?.boardTypeUuid,
+      typeName: currentRow?.typeName,
+      uploadImgYn: 'N',
+      commentYn: 'N',
+    },
+  })
+
+  const onSubmit = (values: any) => {
+    form.reset()
+    toast({
+      title: 'You submitted the following values:',
+      description: (
+        <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
+          <code className='text-white'>{JSON.stringify(values, null, 2)}</code>
+        </pre>
+      ),
+    })
+    setOpen(null)
+  }
+
+  return (
+    <FormProvider {...form}>
+      <form
+        id={'update'}
+        onSubmit={form.handleSubmit((data) => {
+          onSubmit(update(data))
+        })}
+        className='space-y-4 p-0.5'
+      >
+        <FormField
+          control={form.control}
+          name='typeName'
+          render={({ field }) => (
+            <FormItem className='grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0'>
+              <FormLabel className='col-span-2 text-right'>속성명</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder='속성명'
+                  className='col-span-4'
+                  autoComplete='off'
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage className='col-span-4 col-start-3' />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name='uploadImgYn'
+          render={({ field }) => (
+            <FormItem className='grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0'>
+              <FormLabel className='col-span-2 text-right'>
+                이미지 사용
+              </FormLabel>
+              <FormControl>
+                <RadioGroup
+                  onValueChange={field.onChange}
+                  defaultValue={'N'}
+                  className='flex col-span-4'
+                >
+                  <div className='flex items-center space-x-2'>
+                    <RadioGroupItem value='Y' id='Y' />
+                    <Label htmlFor='Y'>사용</Label>
+                  </div>
+                  <div className='flex items-center space-x-2'>
+                    <RadioGroupItem value='N' id='N' />
+                    <Label htmlFor='N'>미사용</Label>
+                  </div>
+                </RadioGroup>
+              </FormControl>
+              <FormMessage className='col-span-4 col-start-3' />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name='commentYn'
+          render={({ field }) => (
+            <FormItem className='grid grid-cols-6 items-center gap-x-4 gap-y-1 space-y-0'>
+              <FormLabel className='col-span-2 text-right'>댓글 사용</FormLabel>
+              <FormControl>
+                <RadioGroup
+                  onValueChange={field.onChange}
+                  defaultValue={'N'}
+                  className='flex col-span-4'
+                >
+                  <div className='flex items-center space-x-2'>
+                    <RadioGroupItem value='Y' id='Y' />
+                    <Label htmlFor='Y'>사용</Label>
+                  </div>
+                  <div className='flex items-center space-x-2'>
+                    <RadioGroupItem value='N' id='N' />
+                    <Label htmlFor='N'>미사용</Label>
+                  </div>
+                </RadioGroup>
+              </FormControl>
+              <FormMessage className='col-span-4 col-start-3' />
+            </FormItem>
+          )}
+        />
+      </form>
+    </FormProvider>
+  )
+}
