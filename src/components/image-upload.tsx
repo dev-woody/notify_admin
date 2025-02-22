@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useImageUpload } from '@/queries/common/useImageQuery'
+// import { useImageUpload } from '@/queries/common/useImageQuery'
 import { X, Plus } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { toast } from '@/hooks/use-toast'
@@ -26,45 +26,45 @@ export default function ImageUpload({
   multiple = false,
 }: ImageUploadProps) {
   const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([])
-  const { mutate: uploadImage } = useImageUpload()
+  // const { mutate: uploadImage } = useImageUpload()
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files
 
-    if (files) {
-      for (let i = 0; i < files.length; i++) {
-        uploadImage(
-          { file: files[i], imageType },
-          {
-            onSuccess: (response) => {
-              const data = response.data
-              setUploadedImages((prev) => [
-                ...prev,
-                {
-                  uuid: data.imageUuid,
-                  url: data.imageUrl,
-                  name: data.imageName,
-                },
-              ])
+    // if (files) {
+    //   for (let i = 0; i < files.length; i++) {
+    //     uploadImage(
+    //       { file: files[i], imageType },
+    //       {
+    //         onSuccess: (response) => {
+    //           const data = response.data
+    //           setUploadedImages((prev) => [
+    //             ...prev,
+    //             {
+    //               uuid: data.imageUuid,
+    //               url: data.imageUrl,
+    //               name: data.imageName,
+    //             },
+    //           ])
 
-              setImageList(data.imageUuid)
+    //           setImageList(data.imageUuid)
 
-              toast({
-                title: '업로드 성공',
-                description: `${data.imageName} 업로드되었습니다.`,
-              })
-            },
-            onError: () => {
-              toast({
-                title: '업로드 실패',
-                description: '이미지 업로드 중 오류가 발생했습니다.',
-                variant: 'destructive',
-              })
-            },
-          }
-        )
-      }
-    }
+    //           toast({
+    //             title: '업로드 성공',
+    //             description: `${data.imageName} 업로드되었습니다.`,
+    //           })
+    //         },
+    //         onError: () => {
+    //           toast({
+    //             title: '업로드 실패',
+    //             description: '이미지 업로드 중 오류가 발생했습니다.',
+    //             variant: 'destructive',
+    //           })
+    //         },
+    //       }
+    //     )
+    //   }
+    // }
   }
 
   const handleRemoveImage = (uuid: string) => {
