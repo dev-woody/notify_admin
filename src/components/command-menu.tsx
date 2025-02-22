@@ -1,4 +1,4 @@
-import React from 'react'
+import { useCallback } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 import {
   IconArrowRightDashed,
@@ -25,7 +25,7 @@ export function CommandMenu() {
   const { setTheme } = useTheme()
   const { open, setOpen } = useSearch()
 
-  const runCommand = React.useCallback(
+  const runCommand = useCallback(
     (command: () => unknown) => {
       setOpen(false)
       command()

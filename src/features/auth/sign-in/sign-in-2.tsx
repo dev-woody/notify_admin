@@ -7,9 +7,9 @@ export default function SignIn2() {
         <div className='absolute inset-0 bg-zinc-900' />
         <div className='relative z-20 flex items-center text-lg font-medium'>
           <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground mr-2'>
-            <img src={'/images/vite.svg'} className='rounded-lg' alt='zzro' />
+            <img src={'/images/vite.svg'} className='rounded-lg' alt='notify' />
           </div>
-          ZAZAERO
+          NOTIFY
         </div>
 
         <img
