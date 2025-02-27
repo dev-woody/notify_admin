@@ -1,32 +1,29 @@
 import { useNavigate } from '@tanstack/react-router'
-import { IconUserPlus } from '@tabler/icons-react'
-// import { User } from '@/data/schema/users/userSchema'
 import { TableProvider } from '@/context/table-context'
-import { Button } from '@/components/ui/button'
 import { CustomTable } from '@/components/common/table'
 import { CustomDialogs } from '@/components/common/table/dialog/dialog'
 import { PrimaryButtons } from '@/components/common/table/primary-button'
 import BreadCrumbForm from '@/components/layout/bread-crumb'
 import { Main } from '@/components/layout/main'
-import { columns } from './components/user-columns'
+import { columns } from './components/notice-columns'
 
 // import { AdOrgPrimaryButtons } from './components/ad-org-primary-buttons'
 
-export default function UserList() {
+export default function NoticeList() {
   const BreadCrumb = [
     {
       title: '홈',
       url: '/',
     },
     {
-      title: '직원관리',
+      title: '공지사항',
       url: '',
     },
   ]
 
   const navigate = useNavigate()
 
-  // const onClickRow = (row: User) => {
+  // const onClickRow = (row: Notice) => {
   // navigate({ to: `/}` })
   // }
 
@@ -36,7 +33,7 @@ export default function UserList() {
         <div className='mb-2 flex items-center justify-between space-y-2 flex-wrap'>
           <div>
             <BreadCrumbForm breadCrumbList={BreadCrumb} />
-            <h2 className='text-2xl font-bold tracking-tight'>직원관리</h2>
+            <h2 className='text-2xl font-bold tracking-tight'>공지사항</h2>
             {/* <p className='text-muted-foreground'>시공업자 목록을 확인하세요.</p> */}
           </div>
           <PrimaryButtons />
@@ -47,7 +44,7 @@ export default function UserList() {
       </Main>
 
       <CustomDialogs
-        deleteKey='userName'
+        deleteKey='noticeName'
         registerForm={<></>}
         updateForm={<></>}
       />

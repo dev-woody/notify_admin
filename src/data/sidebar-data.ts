@@ -1,22 +1,7 @@
 import {
-  IconBarrierBlock,
-  IconBrowserCheck,
-  IconBug,
-  IconChecklist,
-  IconError404,
-  IconHelp,
+
+  IconLayoutBoard,
   IconLayoutDashboard,
-  IconLock,
-  IconLockAccess,
-  IconMessages,
-  IconNotification,
-  IconPackages,
-  IconPalette,
-  IconServerOff,
-  IconSettings,
-  IconTool,
-  IconUserCog,
-  IconUserOff,
   IconUsers,
 } from '@tabler/icons-react'
 import { AudioWaveform, Command, GalleryVerticalEnd } from 'lucide-react'
@@ -57,7 +42,7 @@ export const sidebarData: SidebarData = {
         {
           title: '직원관리',
           url: '/user',
-          icon: IconChecklist,
+          icon: IconUsers,
         },
         // {
         //   title: 'Apps',
@@ -77,6 +62,21 @@ export const sidebarData: SidebarData = {
         // },
       ],
     },
+    {
+      title: '설정',
+      items: [
+        {
+          title: "게시판",
+          icon: IconLayoutBoard,
+          items: [
+            {
+              title: '공지사항',
+              url: '/sign-in',
+            },
+          ]
+        }
+      ]
+    }
     // {
     //   title: 'Pages',
     //   items: [

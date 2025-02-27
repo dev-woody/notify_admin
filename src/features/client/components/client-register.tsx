@@ -1,3 +1,5 @@
+'use client'
+
 import { FormProvider, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { clientRegisterSchema } from '@/data/schema/clientSchema'
@@ -13,8 +15,6 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import {
   Select,
   SelectContent,
@@ -22,84 +22,26 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import ImageUpload from '@/components/image-upload'
 import BreadCrumbForm from '@/components/layout/bread-crumb'
 import { Main } from '@/components/layout/main'
-
-// import CategoryReg from './category-add'
-// import CustomOption from './option-component'
 
 export default function ClientRegisterForm() {
   const form = useForm<any>({
     resolver: zodResolver(clientRegisterSchema),
     defaultValues: {
-      clientTypeUuid: '',
-      categoryUuid: [],
-      thumbnailImages: [],
-      detailImages: [],
-      clientName: '',
-      clientDescription: '',
-      extraDescription: '',
-      vat: 0,
-      price: 0,
-      givenPointRate: 0,
-      totalPrice: 0,
-      searchTag: [],
-      cancelUse: 'N',
-      returnUse: 'N',
-      returnDays: 0,
-      sameDayShipment: 'N',
-      amountPerP: 0,
-      constructionPerP: 0,
-      weightPerP: 0,
-      width: 0,
-      height: 0,
-      length: 0,
-      saleStatus: 'N',
-      visibleStatus: 'N',
-      discountProd: 'N',
-      recommendProd: 'N',
-      popularProd: 'N',
-      parcelYn: 'N',
-      shipmentDate: 0,
-      carbonFootprint: 0,
-      options: [],
+      businessType: '',
+      companyName: '',
+      clientAddress: '',
+      representativeName: '',
+      contact: '',
+      placeLink: '',
     },
   })
 
-  // const onSumit = (values: ClientRegister) => {
-  //   console.log(values)
-  //   register(values, {
-  //     onSuccess: () => {
-  //       toast({
-  //         title: '자재 등록 성공',
-  //         description: '자재가 정상적으로 등록되었습니다.',
-  //       })
-  //       router.navigate({ to: '/client' })
-  //     },
-  //     onError: () => {
-  //       toast({
-  //         title: '자재 등록 실패',
-  //         description: '등록 중 오류가 발생했습니다.',
-  //         variant: 'destructive',
-  //       })
-  //     },
-  //   })
-  // }
-
   const BreadCrumb = [
-    {
-      title: '홈',
-      url: '/',
-    },
-    {
-      title: '업체관리',
-      url: '/',
-    },
-    {
-      title: '업체등록',
-      url: '',
-    },
+    { title: '홈', url: '/' },
+    { title: '업체관리', url: '/' },
+    { title: '업체등록', url: '' },
   ]
 
   return (
@@ -109,65 +51,54 @@ export default function ClientRegisterForm() {
           <div>
             <BreadCrumbForm breadCrumbList={BreadCrumb} />
             <h2 className='text-2xl font-bold tracking-tight'>업체등록</h2>
-            {/* <p className='text-muted-foreground'>시공업자 목록을 확인하세요.</p> */}
           </div>
         </div>
-        <form
-          id={'register'}
-          className='space-y-4 pb-4'
-          // onSubmit={form.handleSubmit(onSumit)}
-        >
-          {/* <CategoryReg
-            setCategories={(categories: any) => {
-              form.setValue('categoryUuid', categories) // ✅ 바로 setValue 사용
-            }}
-          /> */}
-          <div className='md:space-y-0 mb-4 md:gap-4 space-y-4 grid md:grid-cols-2 grip-cols-1'>
-            <Card>
+        <form id={'register'} className='space-y-4 pb-4'>
+          <div className='grid md:grid-cols-2 grid-cols-1 gap-4'>
+            <Card className='col-span-2'>
               <CardHeader>
-                <CardTitle>기본정보</CardTitle>
+                <CardTitle>업체 정보</CardTitle>
               </CardHeader>
-              <CardContent className='space-y-2'>
+              <CardContent className='grid md:grid-cols-2 grid-cols-1 gap-4'>
+                {/* 업종 선택 (Select) */}
                 <FormField
                   control={form.control}
-                  name='clientTypeUuid'
+                  name='businessType'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>선택예시</FormLabel>
+                      <FormLabel>업종</FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                       >
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder='선택예시을 선택하세요...' />
+                            <SelectValue placeholder='업종을 선택하세요' />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {/* {clientType?.map((clientType: ClientType) => (
-                            <SelectItem
-                              key={clientType.clientTypeUuid}
-                              value={clientType.clientTypeUuid}
-                            >
-                              {clientType.typeName}
-                            </SelectItem>
-                          ))} */}
+                          <SelectItem value='맛집'>맛집</SelectItem>
+                          <SelectItem value='뷰티'>뷰티</SelectItem>
+                          <SelectItem value='제품'>제품</SelectItem>
+                          <SelectItem value='기타'>기타</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+
+                {/* 업체명 */}
                 <FormField
                   control={form.control}
-                  name='clientName'
+                  name='companyName'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>입력 예시</FormLabel>
+                      <FormLabel>업체명</FormLabel>
                       <FormControl>
                         <Input
                           autoComplete='off'
-                          placeholder='입력 예시'
+                          placeholder='업체명을 입력하세요'
                           {...field}
                         />
                       </FormControl>
@@ -175,37 +106,18 @@ export default function ClientRegisterForm() {
                     </FormItem>
                   )}
                 />
-                {/* <FormField
-                  control={form.control}
-                  name='thumbnailImages'
-                  render={() => (
-                    <FormItem>
-                      <FormLabel>대표이미지</FormLabel>
-                      <FormControl>
-                        <ImageUpload
-                          imageType='thumbnail'
-                          previewType='image'
-                          setImageList={(uuid) => {
-                            const current =
-                              form.getValues('thumbnailImages') || []
-                            form.setValue('thumbnailImages', [...current, uuid]) // ✅ 바로 setValue 사용
-                          }}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />> */}
+
+                {/* 업체 주소 */}
                 <FormField
                   control={form.control}
-                  name='vat'
+                  name='clientAddress'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>입력 예시</FormLabel>
+                      <FormLabel>업체 주소</FormLabel>
                       <FormControl>
                         <Input
                           autoComplete='off'
-                          placeholder='입력 예시'
+                          placeholder='업체 주소를 입력하세요'
                           {...field}
                         />
                       </FormControl>
@@ -213,16 +125,18 @@ export default function ClientRegisterForm() {
                     </FormItem>
                   )}
                 />
+
+                {/* 대표자명 */}
                 <FormField
                   control={form.control}
-                  name='price'
+                  name='representativeName'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>입력 예시</FormLabel>
+                      <FormLabel>대표자 명</FormLabel>
                       <FormControl>
                         <Input
                           autoComplete='off'
-                          placeholder='입력 예시'
+                          placeholder='대표자명을 입력하세요'
                           {...field}
                         />
                       </FormControl>
@@ -230,16 +144,18 @@ export default function ClientRegisterForm() {
                     </FormItem>
                   )}
                 />
+
+                {/* 연락처 */}
                 <FormField
                   control={form.control}
-                  name='givenPointRate'
+                  name='contact'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>입력 예시</FormLabel>
+                      <FormLabel>연락처</FormLabel>
                       <FormControl>
                         <Input
                           autoComplete='off'
-                          placeholder='입력 예시'
+                          placeholder='연락처를 입력하세요'
                           {...field}
                         />
                       </FormControl>
@@ -247,16 +163,18 @@ export default function ClientRegisterForm() {
                     </FormItem>
                   )}
                 />
+
+                {/* 플레이스 링크 */}
                 <FormField
                   control={form.control}
-                  name='totalPrice'
+                  name='placeLink'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>입력 예시</FormLabel>
+                      <FormLabel>플레이스 링크</FormLabel>
                       <FormControl>
                         <Input
                           autoComplete='off'
-                          placeholder='입력 예시'
+                          placeholder='플레이스 링크를 입력하세요'
                           {...field}
                         />
                       </FormControl>
@@ -264,74 +182,13 @@ export default function ClientRegisterForm() {
                     </FormItem>
                   )}
                 />
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>기타 정보</CardTitle>
-              </CardHeader>
-              <CardContent className='space-y-2'>
-                <FormField
-                  control={form.control}
-                  name='cancelUse'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>선텍 예시</FormLabel>
-                      <FormControl className='pb-4'>
-                        <RadioGroup
-                          onValueChange={field.onChange}
-                          defaultValue='N'
-                          className='flex space-x-4'
-                        >
-                          <div className='flex items-center space-x-2'>
-                            <RadioGroupItem value='Y' id='Y' />
-                            <Label htmlFor='Y'>가능</Label>
-                          </div>
-                          <div className='flex items-center space-x-2'>
-                            <RadioGroupItem value='N' id='N' />
-                            <Label htmlFor='N'>불가능</Label>
-                          </div>
-                        </RadioGroup>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name='returnUse'
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>선텍 예시</FormLabel>
-                      <FormControl className='pb-4'>
-                        <RadioGroup
-                          onValueChange={field.onChange}
-                          defaultValue='N'
-                          className='flex space-x-4'
-                        >
-                          <div className='flex items-center space-x-2'>
-                            <RadioGroupItem value='Y' id='Y' />
-                            <Label htmlFor='Y'>가능</Label>
-                          </div>
-                          <div className='flex items-center space-x-2'>
-                            <RadioGroupItem value='N' id='N' />
-                            <Label htmlFor='N'>불가능</Label>
-                          </div>
-                        </RadioGroup>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                {/* 등록 버튼 */}
+                <div className='flex justify-end col-span-2'>
+                  <Button type='submit'>등록</Button>
+                </div>
               </CardContent>
             </Card>
           </div>
-          {/* <CustomOption
-            optionRegister={(opts: any) => {
-              form.setValue('options', opts) // ✅ 바로 setValue 사용
-            }}
-          /> */}
-          <Button type='submit'>등록</Button>
         </form>
       </Main>
     </FormProvider>
