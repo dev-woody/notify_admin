@@ -71,7 +71,7 @@ export const sidebarData: SidebarData = {
           items: [
             {
               title: '공지사항',
-              url: '/sign-in',
+              url: '/board/notice',
             },
           ]
         }
