@@ -1,5 +1,5 @@
 import { ColumnDef } from '@tanstack/react-table'
-// import { User } from '@/data/schema/users/userSchema'
+import { CampaignResponse } from '@/data/schema/campaignSchema'
 import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -9,7 +9,7 @@ import LongText from '@/components/long-text'
 
 // import { callTypes, userTypes } from '../data/data'
 
-export const columns: ColumnDef<any>[] = [
+export const columns: ColumnDef<CampaignResponse>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -54,29 +54,8 @@ export const columns: ColumnDef<any>[] = [
     enableHiding: false,
   },
   {
-    id: '구분',
-    accessorKey: 'paymentType',
-    accessorFn: (row) => row?.paymentType,
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='구분' />
-    ),
-    meta: {
-      className: '',
-      filterOptions: [
-        { label: '등록업체', value: 'O' },
-        { label: '검수중', value: 'C' },
-        { label: '결제업체', value: 'P' },
-      ],
-    },
-    cell: ({ row }) => (
-      <LongText className='max-w-36'>{row.getValue('paymentType')}</LongText>
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    id: 'clientName',
-    accessorKey: 'clientName',
+    id: 'title',
+    accessorKey: 'title',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='업체명' />
     ),
@@ -84,79 +63,79 @@ export const columns: ColumnDef<any>[] = [
       className: 'w-60',
     },
     cell: ({ row }) => (
-      <LongText className='max-w-60'>{row.getValue('clientName')}</LongText>
+      <LongText className='max-w-60'>{row.getValue('title')}</LongText>
     ),
     enableSorting: false,
     enableHiding: false,
   },
   {
-    id: 'amount',
-    accessorKey: 'amount',
+    id: 'contactName',
+    accessorKey: 'contactName',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='회차' />
+      <DataTableColumnHeader column={column} title='대표명' />
     ),
     cell: ({ row }) => (
-      <LongText className='max-w-36'>{row.getValue('amount')}</LongText>
+      <LongText className='max-w-36'>{row.getValue('contactName')}</LongText>
     ),
     enableSorting: false,
     enableHiding: false,
   },
   {
-    id: 'type',
-    accessorKey: 'type',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='업종' />
-    ),
-    cell: ({ row }) => (
-      <LongText className='max-w-36'>{row.getValue('type')}</LongText>
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    id: 'phone',
-    accessorKey: 'phone',
+    id: 'contactPhone',
+    accessorKey: 'contactPhone',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='연락처' />
     ),
     cell: ({ row }) => (
-      <LongText className='max-w-36'>{row.getValue('phone')}</LongText>
+      <LongText className='max-w-36'>{row.getValue('contactPhone')}</LongText>
     ),
     enableSorting: false,
     enableHiding: false,
   },
   {
-    id: 'manager',
-    accessorKey: 'manager',
+    id: 'contactEmail',
+    accessorKey: 'contactEmail',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='2차 담당자' />
+      <DataTableColumnHeader column={column} title='이메일' />
     ),
     cell: ({ row }) => (
-      <LongText className='max-w-36'>{row.getValue('manager')}</LongText>
+      <LongText className='max-w-36'>{row.getValue('contactEmail')}</LongText>
     ),
     enableSorting: false,
     enableHiding: false,
   },
-  // {
-  //   id: 'updatedAt',
-  //   accessorKey: 'updatedAt',
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title='수정일' />
-  //   ),
-  //   cell: ({ row }) => <div>{row.getValue('updatedAt')}</div>,
+  {
+    id: 'status',
+    accessorKey: 'status',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='상태' />
+    ),
+    cell: ({ row }) => (
+      <LongText className='max-w-36'>{row.getValue('status')}</LongText>
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
+    id: 'updatedAt',
+    accessorKey: 'updatedAt',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='수정일' />
+    ),
+    cell: ({ row }) => <div>{row.getValue('updatedAt')}</div>,
 
-  //   enableSorting: false,
-  // },
-  // {
-  //   id: 'createdAt',
-  //   accessorKey: 'createdAt',
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title='생성일' />
-  //   ),
-  //   cell: ({ row }) => <div>{row.getValue('createdAt')}</div>,
+    enableSorting: false,
+  },
+  {
+    id: 'createdAt',
+    accessorKey: 'createdAt',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='생성일' />
+    ),
+    cell: ({ row }) => <div>{row.getValue('createdAt')}</div>,
 
-  //   enableSorting: false,
-  // },
+    enableSorting: false,
+  },
   {
     id: 'actions',
     meta: {

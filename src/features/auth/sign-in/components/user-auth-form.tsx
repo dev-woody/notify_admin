@@ -4,6 +4,8 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Link } from '@tanstack/react-router'
 import { IconBrandGoogle, IconBrandKakoTalk } from '@tabler/icons-react'
+import { UserLogin, userLoginSchema } from '@/data/schema/userSchema'
+import { useSignIn } from '@/queries/useAuthQuery'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
@@ -17,42 +19,36 @@ import {
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/password-input'
 
-// import { useSignIn } from '../../../../queries/useAuthQuery'
-
 type UserAuthFormProps = HTMLAttributes<HTMLDivElement>
 
-const formSchema = z.object({
-  id: z.string().min(1, { message: '아이디를 입력해주세요.' }),
-  password: z
-    .string()
-    .min(1, {
-      message: '비밀번호를 입력해주세요.',
-    })
-    .min(7, {
-      message: '비밀번호는 7자리 이상입니다.',
-    }),
-})
-
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
-  // const { mutate: login } = useSignIn()
-
+  const { mutate: login } = useSignIn()
   const [isLoading, setIsLoading] = useState(false)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null) // 에러 메시지 상태 추가
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof userLoginSchema>>({
+    resolver: zodResolver(userLoginSchema),
     defaultValues: {
-      id: '',
+      email: '',
       password: '',
     },
   })
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
+  async function onSubmit(data: UserLogin) {
     setIsLoading(true)
-    // login(data)
+    setErrorMessage(null) // 로그인 시 기존 에러 메시지 초기화
 
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 3000)
+    login(data, {
+      onSuccess: () => {
+        setIsLoading(false)
+      },
+      onError: (error: any) => {
+        setIsLoading(false)
+        setErrorMessage(
+          error.response?.data?.message || '로그인에 실패했습니다.'
+        ) // 에러 메시지 설정
+      },
+    })
   }
 
   return (
@@ -62,7 +58,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           <div className='grid gap-2'>
             <FormField
               control={form.control}
-              name='id'
+              name='email'
               render={({ field }) => (
                 <FormItem className='space-y-1'>
                   <FormLabel>아이디</FormLabel>
@@ -94,8 +90,16 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
                 </FormItem>
               )}
             />
+
+            {/* 로그인 실패 시 에러 메시지 표시 */}
+            {errorMessage && (
+              <div className='text-sm text-red-500 text-center'>
+                {errorMessage}
+              </div>
+            )}
+
             <Button className='mt-2' disabled={isLoading}>
-              로그인
+              {isLoading ? '로그인 중...' : '로그인'}
             </Button>
 
             <div className='relative my-2'>

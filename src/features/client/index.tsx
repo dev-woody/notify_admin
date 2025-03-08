@@ -1,5 +1,6 @@
 import { useNavigate } from '@tanstack/react-router'
 import { IconUserPlus } from '@tabler/icons-react'
+import { useCampaignList } from '@/queries/useCampaignQuery'
 // import { User } from '@/data/schema/users/userSchema'
 import { TableProvider } from '@/context/table-context'
 import { Button } from '@/components/ui/button'
@@ -13,6 +14,7 @@ import { columns } from './components/client-columns'
 // import { AdOrgPrimaryButtons } from './components/ad-org-primary-buttons'
 
 export default function ClientList() {
+  const { data: campaign } = useCampaignList({ page: 0, size: 10, desc: false })
   const BreadCrumb = [
     {
       title: '홈',
@@ -49,7 +51,7 @@ export default function ClientList() {
           </div>{' '}
         </div>
         <div className='-mx-4 flex-1 overflow-auto px-4 py-1 lg:flex-row lg:space-x-12 lg:space-y-0'>
-          <CustomTable data={[]} columns={columns} />
+          <CustomTable data={campaign?.content} columns={columns} />
         </div>
       </Main>
 

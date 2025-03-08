@@ -1,5 +1,6 @@
 import { useNavigate } from '@tanstack/react-router'
 import { IconUserPlus } from '@tabler/icons-react'
+import { useAdminList } from '@/queries/useAdminQuery'
 // import { User } from '@/data/schema/users/userSchema'
 import { TableProvider } from '@/context/table-context'
 import { Button } from '@/components/ui/button'
@@ -9,10 +10,12 @@ import { PrimaryButtons } from '@/components/common/table/primary-button'
 import BreadCrumbForm from '@/components/layout/bread-crumb'
 import { Main } from '@/components/layout/main'
 import { columns } from './components/user-columns'
+import AdminManagement from './components/user-register'
 
 // import { AdOrgPrimaryButtons } from './components/ad-org-primary-buttons'
 
 export default function UserList() {
+  const { data: user } = useAdminList()
   const BreadCrumb = [
     {
       title: '홈',
@@ -42,13 +45,13 @@ export default function UserList() {
           <PrimaryButtons />
         </div>
         <div className='-mx-4 flex-1 overflow-auto px-4 py-1 lg:flex-row lg:space-x-12 lg:space-y-0'>
-          <CustomTable data={[]} columns={columns} />
+          <CustomTable data={user?.content} columns={columns} />
         </div>
       </Main>
 
       <CustomDialogs
         deleteKey='userName'
-        registerForm={<></>}
+        registerForm={<AdminManagement />}
         updateForm={<></>}
       />
     </TableProvider>

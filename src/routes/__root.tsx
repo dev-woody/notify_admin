@@ -1,3 +1,4 @@
+// src/routes/root-route.ts
 import { QueryClient } from '@tanstack/react-query'
 import {
   createRootRouteWithContext,
@@ -6,7 +7,8 @@ import {
 } from '@tanstack/react-router'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { TanStackRouterDevtools } from '@tanstack/router-devtools'
-// import { checkSession } from '@/api/user-management/auth-api'
+import { checkLoginStatus } from '@/api/user-management/auth-api'
+import { useUserStore } from '@/stores/userStore'
 import { Toaster } from '@/components/ui/toaster'
 import GeneralError from '@/features/errors/general-error'
 import NotFoundError from '@/features/errors/not-found-error'
@@ -31,9 +33,9 @@ export const Route = createRootRouteWithContext<{
   notFoundComponent: NotFoundError,
   errorComponent: GeneralError,
   beforeLoad: async () => {
-    // const { user, setUser } = useUserStore.getState()
+    const { user, setUser } = useUserStore.getState()
 
-    // 예외적으로 로그인 없이 접근 가능한 페이지 설정
+    // 로그인 없이 접근 가능한 페이지 리스트
     const publicPaths = [
       '/sign-in-2',
       '/sign-up',
@@ -46,25 +48,35 @@ export const Route = createRootRouteWithContext<{
 
     const currentPath = window.location.pathname
 
-    // if (!user && !publicPaths.includes(currentPath)) {
-    //   try {
-    //     // 서버에서 세션 확인 API 호출
-    //     const sessionData = await checkSession()
-    //     if (sessionData) {
-    //       setUser(sessionData)
-    //     } else {
-    //       throw redirect({
-    //         to: '/sign-in-2',
-    //         search: { redirect: window.location.pathname },
-    //       })
-    //     }
-    //   } catch (error) {
-    //     console.error('세션 검증 실패:', error)
-    //     throw redirect({
-    //       to: '/sign-in-2',
-    //       search: { redirect: currentPath },
-    //     })
-    //   }
-    // }
+    // 로그인 없이 접근 가능한 페이지라면 검증 X
+    if (publicPaths.includes(currentPath)) {
+      return
+    }
+
+    // 이미 로그인된 경우 토큰 검증 생략
+    if (user) {
+      return
+    }
+
+    try {
+      const userData = await checkLoginStatus() // JWT 토큰 검증
+      if (userData) {
+        setUser(userData)
+      } else {
+        throw new Error('인증 실패')
+      }
+    } catch (error: any) {
+      console.error('JWT 인증 실패:', error)
+
+      // 403 오류 발생 시 리디렉션하지 않음
+      if (error.response?.status === 403) {
+        return
+      }
+
+      throw redirect({
+        to: '/sign-in-2',
+        search: { redirect: currentPath },
+      })
+    }
   },
 })
