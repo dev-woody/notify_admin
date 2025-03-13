@@ -119,7 +119,7 @@ export default function ClientRegisterForm() {
         >
           {/* <CategoryReg
             setCategories={(categories: any) => {
-              form.setValue('categoryUuid', categories) // ✅ 바로 setValue 사용
+              form.setValue('categoryUuid', categories) // 바로 setValue 사용
             }}
           /> */}
           <div className='md:space-y-0 mb-4 md:gap-4 space-y-4 grid md:grid-cols-2 grip-cols-1'>
@@ -188,7 +188,7 @@ export default function ClientRegisterForm() {
                           setImageList={(uuid) => {
                             const current =
                               form.getValues('thumbnailImages') || []
-                            form.setValue('thumbnailImages', [...current, uuid]) // ✅ 바로 setValue 사용
+                            form.setValue('thumbnailImages', [...current, uuid]) // 바로 setValue 사용
                           }}
                         />
                       </FormControl>
@@ -328,7 +328,7 @@ export default function ClientRegisterForm() {
           </div>
           {/* <CustomOption
             optionRegister={(opts: any) => {
-              form.setValue('options', opts) // ✅ 바로 setValue 사용
+              form.setValue('options', opts) // 바로 setValue 사용
             }}
           /> */}
           <Button type='submit'>등록</Button>

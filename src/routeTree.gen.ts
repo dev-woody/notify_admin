@@ -18,6 +18,8 @@ import { Route as AuthenticatedIndexImport } from './routes/_authenticated/index
 import { Route as authSignInImport } from './routes/(auth)/sign-in'
 import { Route as authOtpImport } from './routes/(auth)/otp'
 import { Route as auth500Import } from './routes/(auth)/500'
+import { Route as AuthenticatedUserIndexImport } from './routes/_authenticated/user/index'
+import { Route as AuthenticatedCampaignCampaignIdImport } from './routes/_authenticated/campaign/$campaignId'
 
 // Create Virtual Routes
 
@@ -33,9 +35,6 @@ const authForgotPasswordLazyImport = createFileRoute(
 )()
 const AuthenticatedSettingsRouteLazyImport = createFileRoute(
   '/_authenticated/settings',
-)()
-const AuthenticatedUserIndexLazyImport = createFileRoute(
-  '/_authenticated/user/',
 )()
 const AuthenticatedTasksIndexLazyImport = createFileRoute(
   '/_authenticated/tasks/',
@@ -177,16 +176,6 @@ const auth500Route = auth500Import.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const AuthenticatedUserIndexLazyRoute = AuthenticatedUserIndexLazyImport.update(
-  {
-    id: '/user/',
-    path: '/user/',
-    getParentRoute: () => AuthenticatedRouteRoute,
-  } as any,
-).lazy(() =>
-  import('./routes/_authenticated/user/index.lazy').then((d) => d.Route),
-)
-
 const AuthenticatedTasksIndexLazyRoute =
   AuthenticatedTasksIndexLazyImport.update({
     id: '/tasks/',
@@ -233,6 +222,12 @@ const AuthenticatedChatsIndexLazyRoute =
   } as any).lazy(() =>
     import('./routes/_authenticated/chats/index.lazy').then((d) => d.Route),
   )
+
+const AuthenticatedUserIndexRoute = AuthenticatedUserIndexImport.update({
+  id: '/user/',
+  path: '/user/',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 const AuthenticatedSettingsNotificationsLazyRoute =
   AuthenticatedSettingsNotificationsLazyImport.update({
@@ -286,6 +281,13 @@ const AuthenticatedBoardNoticeLazyRoute =
   } as any).lazy(() =>
     import('./routes/_authenticated/board/notice.lazy').then((d) => d.Route),
   )
+
+const AuthenticatedCampaignCampaignIdRoute =
+  AuthenticatedCampaignCampaignIdImport.update({
+    id: '/campaign/$campaignId',
+    path: '/campaign/$campaignId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 const AuthenticatedClientRegisterIndexLazyRoute =
   AuthenticatedClientRegisterIndexLazyImport.update({
@@ -400,6 +402,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedIndexImport
       parentRoute: typeof AuthenticatedRouteImport
     }
+    '/_authenticated/campaign/$campaignId': {
+      id: '/_authenticated/campaign/$campaignId'
+      path: '/campaign/$campaignId'
+      fullPath: '/campaign/$campaignId'
+      preLoaderRoute: typeof AuthenticatedCampaignCampaignIdImport
+      parentRoute: typeof AuthenticatedRouteImport
+    }
     '/_authenticated/board/notice': {
       id: '/_authenticated/board/notice'
       path: '/board/notice'
@@ -435,6 +444,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSettingsNotificationsLazyImport
       parentRoute: typeof AuthenticatedSettingsRouteLazyImport
     }
+    '/_authenticated/user/': {
+      id: '/_authenticated/user/'
+      path: '/user'
+      fullPath: '/user'
+      preLoaderRoute: typeof AuthenticatedUserIndexImport
+      parentRoute: typeof AuthenticatedRouteImport
+    }
     '/_authenticated/chats/': {
       id: '/_authenticated/chats/'
       path: '/chats'
@@ -468,13 +484,6 @@ declare module '@tanstack/react-router' {
       path: '/tasks'
       fullPath: '/tasks'
       preLoaderRoute: typeof AuthenticatedTasksIndexLazyImport
-      parentRoute: typeof AuthenticatedRouteImport
-    }
-    '/_authenticated/user/': {
-      id: '/_authenticated/user/'
-      path: '/user'
-      fullPath: '/user'
-      preLoaderRoute: typeof AuthenticatedUserIndexLazyImport
       parentRoute: typeof AuthenticatedRouteImport
     }
     '/_authenticated/client/register/': {
@@ -518,12 +527,13 @@ const AuthenticatedSettingsRouteLazyRouteWithChildren =
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedSettingsRouteLazyRoute: typeof AuthenticatedSettingsRouteLazyRouteWithChildren
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedCampaignCampaignIdRoute: typeof AuthenticatedCampaignCampaignIdRoute
   AuthenticatedBoardNoticeLazyRoute: typeof AuthenticatedBoardNoticeLazyRoute
+  AuthenticatedUserIndexRoute: typeof AuthenticatedUserIndexRoute
   AuthenticatedChatsIndexLazyRoute: typeof AuthenticatedChatsIndexLazyRoute
   AuthenticatedClientIndexLazyRoute: typeof AuthenticatedClientIndexLazyRoute
   AuthenticatedHelpCenterIndexLazyRoute: typeof AuthenticatedHelpCenterIndexLazyRoute
   AuthenticatedTasksIndexLazyRoute: typeof AuthenticatedTasksIndexLazyRoute
-  AuthenticatedUserIndexLazyRoute: typeof AuthenticatedUserIndexLazyRoute
   AuthenticatedClientRegisterIndexLazyRoute: typeof AuthenticatedClientRegisterIndexLazyRoute
 }
 
@@ -531,12 +541,13 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSettingsRouteLazyRoute:
     AuthenticatedSettingsRouteLazyRouteWithChildren,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedCampaignCampaignIdRoute: AuthenticatedCampaignCampaignIdRoute,
   AuthenticatedBoardNoticeLazyRoute: AuthenticatedBoardNoticeLazyRoute,
+  AuthenticatedUserIndexRoute: AuthenticatedUserIndexRoute,
   AuthenticatedChatsIndexLazyRoute: AuthenticatedChatsIndexLazyRoute,
   AuthenticatedClientIndexLazyRoute: AuthenticatedClientIndexLazyRoute,
   AuthenticatedHelpCenterIndexLazyRoute: AuthenticatedHelpCenterIndexLazyRoute,
   AuthenticatedTasksIndexLazyRoute: AuthenticatedTasksIndexLazyRoute,
-  AuthenticatedUserIndexLazyRoute: AuthenticatedUserIndexLazyRoute,
   AuthenticatedClientRegisterIndexLazyRoute:
     AuthenticatedClientRegisterIndexLazyRoute,
 }
@@ -558,17 +569,18 @@ export interface FileRoutesByFullPath {
   '/404': typeof errors404LazyRoute
   '/503': typeof errors503LazyRoute
   '/': typeof AuthenticatedIndexRoute
+  '/campaign/$campaignId': typeof AuthenticatedCampaignCampaignIdRoute
   '/board/notice': typeof AuthenticatedBoardNoticeLazyRoute
   '/settings/account': typeof AuthenticatedSettingsAccountLazyRoute
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceLazyRoute
   '/settings/display': typeof AuthenticatedSettingsDisplayLazyRoute
   '/settings/notifications': typeof AuthenticatedSettingsNotificationsLazyRoute
+  '/user': typeof AuthenticatedUserIndexRoute
   '/chats': typeof AuthenticatedChatsIndexLazyRoute
   '/client': typeof AuthenticatedClientIndexLazyRoute
   '/help-center': typeof AuthenticatedHelpCenterIndexLazyRoute
   '/settings/': typeof AuthenticatedSettingsIndexLazyRoute
   '/tasks': typeof AuthenticatedTasksIndexLazyRoute
-  '/user': typeof AuthenticatedUserIndexLazyRoute
   '/client/register': typeof AuthenticatedClientRegisterIndexLazyRoute
 }
 
@@ -584,17 +596,18 @@ export interface FileRoutesByTo {
   '/404': typeof errors404LazyRoute
   '/503': typeof errors503LazyRoute
   '/': typeof AuthenticatedIndexRoute
+  '/campaign/$campaignId': typeof AuthenticatedCampaignCampaignIdRoute
   '/board/notice': typeof AuthenticatedBoardNoticeLazyRoute
   '/settings/account': typeof AuthenticatedSettingsAccountLazyRoute
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceLazyRoute
   '/settings/display': typeof AuthenticatedSettingsDisplayLazyRoute
   '/settings/notifications': typeof AuthenticatedSettingsNotificationsLazyRoute
+  '/user': typeof AuthenticatedUserIndexRoute
   '/chats': typeof AuthenticatedChatsIndexLazyRoute
   '/client': typeof AuthenticatedClientIndexLazyRoute
   '/help-center': typeof AuthenticatedHelpCenterIndexLazyRoute
   '/settings': typeof AuthenticatedSettingsIndexLazyRoute
   '/tasks': typeof AuthenticatedTasksIndexLazyRoute
-  '/user': typeof AuthenticatedUserIndexLazyRoute
   '/client/register': typeof AuthenticatedClientRegisterIndexLazyRoute
 }
 
@@ -614,17 +627,18 @@ export interface FileRoutesById {
   '/(errors)/500': typeof errors500LazyRoute
   '/(errors)/503': typeof errors503LazyRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/campaign/$campaignId': typeof AuthenticatedCampaignCampaignIdRoute
   '/_authenticated/board/notice': typeof AuthenticatedBoardNoticeLazyRoute
   '/_authenticated/settings/account': typeof AuthenticatedSettingsAccountLazyRoute
   '/_authenticated/settings/appearance': typeof AuthenticatedSettingsAppearanceLazyRoute
   '/_authenticated/settings/display': typeof AuthenticatedSettingsDisplayLazyRoute
   '/_authenticated/settings/notifications': typeof AuthenticatedSettingsNotificationsLazyRoute
+  '/_authenticated/user/': typeof AuthenticatedUserIndexRoute
   '/_authenticated/chats/': typeof AuthenticatedChatsIndexLazyRoute
   '/_authenticated/client/': typeof AuthenticatedClientIndexLazyRoute
   '/_authenticated/help-center/': typeof AuthenticatedHelpCenterIndexLazyRoute
   '/_authenticated/settings/': typeof AuthenticatedSettingsIndexLazyRoute
   '/_authenticated/tasks/': typeof AuthenticatedTasksIndexLazyRoute
-  '/_authenticated/user/': typeof AuthenticatedUserIndexLazyRoute
   '/_authenticated/client/register/': typeof AuthenticatedClientRegisterIndexLazyRoute
 }
 
@@ -644,17 +658,18 @@ export interface FileRouteTypes {
     | '/404'
     | '/503'
     | '/'
+    | '/campaign/$campaignId'
     | '/board/notice'
     | '/settings/account'
     | '/settings/appearance'
     | '/settings/display'
     | '/settings/notifications'
+    | '/user'
     | '/chats'
     | '/client'
     | '/help-center'
     | '/settings/'
     | '/tasks'
-    | '/user'
     | '/client/register'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -669,17 +684,18 @@ export interface FileRouteTypes {
     | '/404'
     | '/503'
     | '/'
+    | '/campaign/$campaignId'
     | '/board/notice'
     | '/settings/account'
     | '/settings/appearance'
     | '/settings/display'
     | '/settings/notifications'
+    | '/user'
     | '/chats'
     | '/client'
     | '/help-center'
     | '/settings'
     | '/tasks'
-    | '/user'
     | '/client/register'
   id:
     | '__root__'
@@ -697,17 +713,18 @@ export interface FileRouteTypes {
     | '/(errors)/500'
     | '/(errors)/503'
     | '/_authenticated/'
+    | '/_authenticated/campaign/$campaignId'
     | '/_authenticated/board/notice'
     | '/_authenticated/settings/account'
     | '/_authenticated/settings/appearance'
     | '/_authenticated/settings/display'
     | '/_authenticated/settings/notifications'
+    | '/_authenticated/user/'
     | '/_authenticated/chats/'
     | '/_authenticated/client/'
     | '/_authenticated/help-center/'
     | '/_authenticated/settings/'
     | '/_authenticated/tasks/'
-    | '/_authenticated/user/'
     | '/_authenticated/client/register/'
   fileRoutesById: FileRoutesById
 }
@@ -771,12 +788,13 @@ export const routeTree = rootRoute
       "children": [
         "/_authenticated/settings",
         "/_authenticated/",
+        "/_authenticated/campaign/$campaignId",
         "/_authenticated/board/notice",
+        "/_authenticated/user/",
         "/_authenticated/chats/",
         "/_authenticated/client/",
         "/_authenticated/help-center/",
         "/_authenticated/tasks/",
-        "/_authenticated/user/",
         "/_authenticated/client/register/"
       ]
     },
@@ -828,6 +846,10 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/index.tsx",
       "parent": "/_authenticated"
     },
+    "/_authenticated/campaign/$campaignId": {
+      "filePath": "_authenticated/campaign/$campaignId.tsx",
+      "parent": "/_authenticated"
+    },
     "/_authenticated/board/notice": {
       "filePath": "_authenticated/board/notice.lazy.tsx",
       "parent": "/_authenticated"
@@ -848,6 +870,10 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/settings/notifications.lazy.tsx",
       "parent": "/_authenticated/settings"
     },
+    "/_authenticated/user/": {
+      "filePath": "_authenticated/user/index.tsx",
+      "parent": "/_authenticated"
+    },
     "/_authenticated/chats/": {
       "filePath": "_authenticated/chats/index.lazy.tsx",
       "parent": "/_authenticated"
@@ -866,10 +892,6 @@ export const routeTree = rootRoute
     },
     "/_authenticated/tasks/": {
       "filePath": "_authenticated/tasks/index.lazy.tsx",
-      "parent": "/_authenticated"
-    },
-    "/_authenticated/user/": {
-      "filePath": "_authenticated/user/index.lazy.tsx",
       "parent": "/_authenticated"
     },
     "/_authenticated/client/register/": {

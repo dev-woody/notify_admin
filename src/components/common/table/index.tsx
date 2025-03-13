@@ -38,16 +38,18 @@ declare module '@tanstack/react-table' {
 
 interface CustomTableProps<T> {
   columns: ColumnDef<T>[]
-  data: T[] | undefined // ✅ 데이터가 로딩 중일 때 undefined 가능
+  data: T[] | undefined // 데이터가 로딩 중일 때 undefined 가능
   onClickRow?: (row: T) => void
-  isLoading?: boolean // ✅ 로딩 상태 추가
+  isLoading?: boolean // 로딩 상태 추가
+  totalPage?: number
 }
 
 export function CustomTable<T>({
   columns,
   data,
   onClickRow,
-  isLoading, // ✅ 로딩 여부 prop 추가
+  isLoading, // 로딩 여부 prop 추가
+  totalPage,
 }: CustomTableProps<T>) {
   const [rowSelection, setRowSelection] = useState({})
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
@@ -55,7 +57,7 @@ export function CustomTable<T>({
   const [sorting, setSorting] = useState<SortingState>([])
 
   const table = useReactTable({
-    data: data || [], // ✅ 데이터가 undefined이면 빈 배열 사용
+    data: data || [], // 데이터가 undefined이면 빈 배열 사용
     columns,
     state: {
       sorting,
@@ -102,7 +104,7 @@ export function CustomTable<T>({
             ))}
           </TableHeader>
           <TableBody>
-            {isLoading ? ( // ✅ 로딩 중이면 Skeleton UI 표시
+            {isLoading ? ( // 로딩 중이면 Skeleton UI 표시
               Array.from({ length: 5 }).map((_, i) => (
                 <TableRow key={i}>
                   {columns.map((col, j) => (
@@ -154,7 +156,7 @@ export function CustomTable<T>({
           </TableBody>
         </Table>
       </div>
-      <DataTablePagination<T> table={table} />
+      {totalPage && <DataTablePagination totalPages={totalPage} />}
     </div>
   )
 }

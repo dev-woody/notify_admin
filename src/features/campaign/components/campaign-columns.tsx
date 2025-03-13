@@ -9,6 +9,19 @@ import LongText from '@/components/long-text'
 
 // import { callTypes, userTypes } from '../data/data'
 
+const statusColors = {
+  PENDING: 'bg-yellow-100 text-yellow-800',
+  APPROVED: 'bg-green-100 text-green-800',
+  REJECTED: 'bg-red-100 text-red-800',
+}
+
+const businessLabels: Record<string, string> = {
+  FAMOUS: '맛집',
+  BEAUTY: '뷰티',
+  PRODUCT: '제품',
+  ETC: '기타',
+}
+
 export const columns: ColumnDef<CampaignResponse>[] = [
   {
     id: 'select',
@@ -42,14 +55,19 @@ export const columns: ColumnDef<CampaignResponse>[] = [
     enableHiding: false,
   },
   {
-    id: 'index',
-    accessorKey: 'index',
+    id: 'business',
+    accessorKey: 'business',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='번호' />
+      <DataTableColumnHeader column={column} title='업종' />
     ),
-    cell: ({ row }) => (
-      <LongText className='max-w-36'>{row.getValue('index')}</LongText>
-    ),
+    cell: ({ row }) => {
+      const business = row.getValue('business') as string
+      return (
+        <LongText className='max-w-24'>
+          {businessLabels[business] || '알 수 없음'}
+        </LongText>
+      )
+    },
     enableSorting: false,
     enableHiding: false,
   },
@@ -110,9 +128,17 @@ export const columns: ColumnDef<CampaignResponse>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='상태' />
     ),
-    cell: ({ row }) => (
-      <LongText className='max-w-36'>{row.getValue('status')}</LongText>
-    ),
+    cell: ({ row }) => {
+      const status = row.getValue('status') as keyof typeof statusColors
+
+      return (
+        <Badge className={cn('px-2 py-1 rounded-md', statusColors[status])}>
+          {status === 'PENDING' && '대기 중'}
+          {status === 'APPROVED' && '승인됨'}
+          {status === 'REJECTED' && '거부됨'}
+        </Badge>
+      )
+    },
     enableSorting: false,
     enableHiding: false,
   },

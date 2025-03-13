@@ -1,8 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
-import ClientList from '@/features/campaign'
+import UserList from '@/features/user'
 
-export const Route = createFileRoute('/_authenticated/')({
-  component: ClientList,
+export const Route = createFileRoute('/_authenticated/user/')({
+  component: UserList,
   validateSearch: (search) => ({
     page: search.page ? Number(search.page) : 0, // 기본값 0
     size: search.size ? Number(search.size) : 10, // 기본값 10

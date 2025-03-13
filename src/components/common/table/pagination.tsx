@@ -1,96 +1,128 @@
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  DoubleArrowLeftIcon,
-  DoubleArrowRightIcon,
-} from '@radix-ui/react-icons'
-import { Table } from '@tanstack/react-table'
-import { Button } from '@/components/ui/button'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
+'use client'
 
-interface DataTablePaginationProps<TData> {
-  table: Table<TData>
+import { useRouter, useSearch, useMatch } from '@tanstack/react-router'
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination'
+
+interface PaginationProps {
+  totalPages: number
 }
 
-export function DataTablePagination<TData>({
-  table,
-}: DataTablePaginationProps<TData>) {
+export function DataTablePagination({ totalPages }: PaginationProps) {
+  const router = useRouter()
+
+  // ✅ 현재 라우트 찾기 (라우트 정보 없을 경우 기본값 설정)
+  const match = useMatch({ strict: false }) || { id: '__root__' }
+
+  // ✅ 현재 라우트 기반으로 `searchParams` 가져오기
+  const searchParams = useSearch({ from: match.id as '__root__' }) || {}
+
+  const {
+    page = 0,
+    size = 10,
+    desc = true,
+  } = searchParams as { page?: number; size?: number; desc?: boolean }
+  const currentPage = Number(page)
+  const pageSize = Number(size)
+  const arrayDesc = desc
+
+  const handlePageChange = (page: number) => {
+    if (page >= 0 && page < totalPages) {
+      router.navigate({
+        to: match.id.replace(/^\/_authenticated/, ''),
+        search: { page, size: pageSize, desc: arrayDesc },
+      })
+    }
+  }
+
+  const getPaginationItems = () => {
+    if (totalPages <= 5) {
+      return Array.from({ length: totalPages }, (_, i) => i)
+    }
+
+    if (currentPage <= 2) {
+      return [0, 1, 2, '...', totalPages - 1]
+    }
+
+    if (currentPage >= totalPages - 3) {
+      return [0, '...', totalPages - 3, totalPages - 2, totalPages - 1]
+    }
+
+    return [
+      0,
+      '...',
+      currentPage - 1,
+      currentPage,
+      currentPage + 1,
+      '...',
+      totalPages - 1,
+    ]
+  }
+
   return (
-    <div className='flex items-center justify-between overflow-auto px-2'>
-      <div className='hidden flex-1 text-sm text-muted-foreground sm:block'>
-        {table.getFilteredSelectedRowModel().rows.length} of{' '}
-        {table.getFilteredRowModel().rows.length} row(s) selected.
-      </div>
-      <div className='flex items-center sm:space-x-6 lg:space-x-8'>
-        <div className='flex items-center space-x-2'>
-          <p className='hidden text-sm font-medium sm:block'>Rows per page</p>
-          <Select
-            value={`${table.getState().pagination.pageSize}`}
-            onValueChange={(value) => {
-              table.setPageSize(Number(value))
-            }}
-          >
-            <SelectTrigger className='h-8 w-[70px]'>
-              <SelectValue placeholder={table.getState().pagination.pageSize} />
-            </SelectTrigger>
-            <SelectContent side='top'>
-              {[10, 20, 30, 40, 50].map((pageSize) => (
-                <SelectItem key={pageSize} value={`${pageSize}`}>
-                  {pageSize}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <div className='flex w-[100px] items-center justify-center text-sm font-medium'>
-          Page {table.getState().pagination.pageIndex + 1} of{' '}
-          {table.getPageCount()}
-        </div>
-        <div className='flex items-center space-x-2'>
-          <Button
-            variant='outline'
-            className='hidden h-8 w-8 p-0 lg:flex'
-            onClick={() => table.setPageIndex(0)}
-            disabled={!table.getCanPreviousPage()}
-          >
-            <span className='sr-only'>처음</span>
-            <DoubleArrowLeftIcon className='h-4 w-4' />
-          </Button>
-          <Button
-            variant='outline'
-            className='h-8 w-8 p-0'
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            <span className='sr-only'>이전</span>
-            <ChevronLeftIcon className='h-4 w-4' />
-          </Button>
-          <Button
-            variant='outline'
-            className='h-8 w-8 p-0'
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            <span className='sr-only'>다음</span>
-            <ChevronRightIcon className='h-4 w-4' />
-          </Button>
-          <Button
-            variant='outline'
-            className='hidden h-8 w-8 p-0 lg:flex'
-            onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-            disabled={!table.getCanNextPage()}
-          >
-            <span className='sr-only'>마지막</span>
-            <DoubleArrowRightIcon className='h-4 w-4' />
-          </Button>
-        </div>
-      </div>
+    <div>
+      <Pagination>
+        <PaginationContent>
+          {/* 이전 페이지 버튼 */}
+          <PaginationItem>
+            <PaginationPrevious
+              href='#'
+              onClick={(e) => {
+                e.preventDefault()
+                handlePageChange(currentPage - 1)
+              }}
+              className={
+                currentPage === 0 ? 'pointer-events-none opacity-50' : ''
+              }
+            />
+          </PaginationItem>
+
+          {/* 페이지 번호 */}
+          {getPaginationItems().map((item, index) =>
+            item === '...' ? (
+              <PaginationItem key={index}>
+                <PaginationEllipsis />
+              </PaginationItem>
+            ) : (
+              <PaginationItem key={index}>
+                <PaginationLink
+                  href='#'
+                  isActive={currentPage === item}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    handlePageChange(Number(item))
+                  }}
+                >
+                  {Number(item) + 1}
+                </PaginationLink>
+              </PaginationItem>
+            )
+          )}
+
+          {/* 다음 페이지 버튼 */}
+          <PaginationItem>
+            <PaginationNext
+              href='#'
+              onClick={(e) => {
+                e.preventDefault()
+                handlePageChange(currentPage + 1)
+              }}
+              className={
+                currentPage === totalPages - 1
+                  ? 'pointer-events-none opacity-50'
+                  : ''
+              }
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
     </div>
   )
 }
